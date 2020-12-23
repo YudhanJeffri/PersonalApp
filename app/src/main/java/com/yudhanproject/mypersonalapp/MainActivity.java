@@ -50,20 +50,16 @@ public class MainActivity extends AppCompatActivity {
     private WeakReference<MainActivity> weakAct = new WeakReference<>(this);
     private GoogleSignInClient mGoogleSignInClient;
     private GoogleSignInAccount account;
-    TextView name,birth,email;
-    ImageView user_image;
+
+
     SignInButton btn_sign;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        name = findViewById(R.id.name);
-        birth = findViewById(R.id.birthday);
-        email = findViewById(R.id.email);
-        user_image = findViewById(R.id.user_image);
         btn_sign = findViewById(R.id.btn_sign);
-
         Scope myScope = new Scope("https://www.googleapis.com/auth/user.birthday.read");
         Scope myScope2 = new Scope(Scopes.PLUS_ME);
         Scope myScope3 = new Scope(Scopes.PROFILE); //get name and id
@@ -81,6 +77,7 @@ public class MainActivity extends AppCompatActivity {
         btn_sign.setOnClickListener(v -> {
             if (account == null) {
                 reqPerm();
+
             } else {
                 SharedPreferences sharedPref = getSharedPreferences(account.getId(), MODE_PRIVATE);
                 if (sharedPref.contains("gender")) {
@@ -88,6 +85,7 @@ public class MainActivity extends AppCompatActivity {
                     printAdvanced();
                 } else {
                     new GetProfileDetails(account, weakAct, TAG).execute();
+
                 }
             }
         });
@@ -101,9 +99,8 @@ public class MainActivity extends AppCompatActivity {
     private void printBasic() {
         account = GoogleSignIn.getLastSignedInAccount(this);
         if (account != null) {
-            name.setText(account.getDisplayName());
-            email.setText(account.getEmail());
-            Glide.with(this).load(account.getPhotoUrl()).into(user_image);
+
+
 
             Log.d(TAG, "latest sign in: "
                     + "\n\tPhoto url:" + account.getPhotoUrl()
@@ -115,6 +112,9 @@ public class MainActivity extends AppCompatActivity {
                     + "\n\tIdToken:" + account.getIdToken()
 
             );
+
+            Intent intent1 = new Intent(MainActivity.this, SecondActivity.class);
+            startActivity(intent1);
         } else {
             Log.w(TAG, "basic info is null");
         }
@@ -172,7 +172,6 @@ public class MainActivity extends AppCompatActivity {
                     String bmonth = sharedPref.getString("bmonth", "");
                     String byear = sharedPref.getString("byear", "");
                     Log.d(TAG, bday + "/" + bmonth + "/" + byear);
-                    birth.setText(bday + "/" + bmonth + "/" + byear);
                 } else {
                     Log.w(TAG, "failed ot get birthday from pref");
                 }
