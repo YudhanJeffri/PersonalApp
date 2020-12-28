@@ -9,11 +9,13 @@ import android.content.SharedPreferences;
 import android.media.Image;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -77,7 +79,6 @@ public class MainActivity extends AppCompatActivity {
         btn_sign.setOnClickListener(v -> {
             if (account == null) {
                 reqPerm();
-
             } else {
                 SharedPreferences sharedPref = getSharedPreferences(account.getId(), MODE_PRIVATE);
                 if (sharedPref.contains("gender")) {
@@ -94,6 +95,7 @@ public class MainActivity extends AppCompatActivity {
     private void reqPerm() {
         Intent signInIntent = mGoogleSignInClient.getSignInIntent();
         startActivityForResult(signInIntent, RC_SIGN_IN);
+
     }
 
     private void printBasic() {
@@ -112,7 +114,6 @@ public class MainActivity extends AppCompatActivity {
                     + "\n\tIdToken:" + account.getIdToken()
 
             );
-
             Intent intent1 = new Intent(MainActivity.this, SecondActivity.class);
             startActivity(intent1);
         } else {
